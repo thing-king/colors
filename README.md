@@ -2,6 +2,9 @@
 
 A simple, powerful terminal coloring and styling library for Nim.
 
+> [!WARNING]  
+> `colors` clashes with `std/colors`, **ensure using** `import pkg/colors`
+
 ## Features
 
 - Easy-to-use text coloring and styling for terminal output
@@ -24,7 +27,7 @@ This library's API is inspired by the popular npm 'colors' package for JavaScrip
 ### Basic Colors
 
 ```nim
-import colors
+import pkg/colors
 
 echo red("This is red text")
 echo green("This is green text")
