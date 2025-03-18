@@ -1,5 +1,6 @@
 # util/colors.nim
 import strutils
+import pkg/regex
 
 type
   Color* = enum
@@ -103,6 +104,10 @@ proc reverse*(s: string): string = stylize(s, TextStyle.Reverse)
 proc hidden*(s: string): string = stylize(s, TextStyle.Hidden)
 proc strikethrough*(s: string): string = stylize(s, TextStyle.Strikethrough)
 
+proc stripColors*(s: string): string =
+  ## Strips all ANSI color codes and other escape sequences from a string
+  result = s.replace(re2"\x1B\[[0-9;]*[a-zA-Z]", "")
+
 when isMainModule:
   echo "--- Regular proc usage ---"
   echo red("This is red text")
@@ -164,3 +169,9 @@ when isMainModule:
   for colorName in ["red", "blue", "yellow", "magenta", "cyan", "white", "grey", "gray", "brightgreen", "brightblue"]:
     echo colorize("This is " & colorName, colorName)
     echo colorize("This has " & colorName & " background", Color.White, getColorFromString(colorName), hasBg = true)
+  
+
+  # Test stripping all colors
+  let allColored = "This is ".red & "multi".green & " colored".blue & " text".yellow
+  echo "Original: ", allColored
+  echo "Stripped all: ", stripColors(allColored)
